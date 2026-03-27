@@ -19,7 +19,7 @@ class GenerateIcon extends Command
         A hyper-realistic, cinematic studio fitness photography shot of the attached model athlete performing a ['.$this->argument('exercise')."].
         Setting: The scene is set in a attached space with sleek matte black equipment if necessary.
         Lighting & Mood: Dramatic 'warm, muted cinematic color grade' lighting with subtle rim lights to define the athlete’s muscles. Moody atmosphere with a slight touch of volumetric fog.
-        Position: 3/4 facing angle, showing the athlete's form and the exercise movement clearly. Dynamic pose that captures the essence of the exercise.
+        Position: 3/4 facing angle.
         Technical Specs: Shot on 85mm lens, f/1.8, shallow depth of field with a blurred gym background. High contrast, sharp focus on the athlete's form, 8k resolution, raw photo style. No text, no watermarks.
         Add blurred depth-of-field effect in the background
         Make sure the environment / character size and positions blend perfectly.";
