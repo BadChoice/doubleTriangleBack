@@ -4,12 +4,13 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
+use Illuminate\Console\Command;
 use Laravel\Ai\Files;
 use Laravel\Ai\Image;
 
-#[Signature('app:generate-tutorial {exercise} {equipment} {instructions}')]
-#[Description('Generate a tutorial star/end position for an exercise.')]
-class GenerateExerciseTutorial
+#[Signature('app:generate-exercise-tutorial {exercise} {equipment} {instructions}')]
+#[Description('Command description')]
+class GenerateExerciseTutorial extends Command
 {
     private function prompt(): string
     {
@@ -20,18 +21,18 @@ REFERENCE PRIORITY:
 - The person from the reference image must be preserved exactly (face, body proportions, hairstyle).
 
 SEQUENCE:
-Show exactly 3 phases from left to right:
+Show exactly 2 phases from left to right
 1) Start position
-2) Mid movement
-3) End position
+2) End position
 
-All three must:
+All two must:
 - use the exact same person
+- use the exact same equipment
 - be perfectly aligned horizontally
 - have identical scale and framing
 
 CAMERA:
-- angle:  use strict side vire OR 3/4 front/view depending on which one suits better the exercise
+- angle: strict 3/4 front
 - full body visible
 - consistent angle across all frames
 - no perspective distortion or lens warping
@@ -40,9 +41,12 @@ EQUIPMENT:
 [EQUIPMENT]
 
 ENVIRONMENT:
-- clean white studio background
+- clean white and bright studio background
 - soft, even lighting
 - no shadows that hide joints
+- soft shadows on the slightly reflective floor
+- no texts at all
+- Use sleek black material equipment if necessary
 
 CLOTHING:
 - fitted athletic outfit in matte black material
@@ -50,8 +54,9 @@ CLOTHING:
 - identical outfit in all frames
 
 FORM ACCURACY (CRITICAL):
-The movement must strictly follow correct biomechanics:
+The movement must strictly follow correct biomechanics and safe exercise execution principles. Each phase must demonstrate proper form, joint alignment, and muscle engagement for the specific exercise. The sequence should clearly illustrate the key positions and transitions of the movement, ensuring that it can be easily understood and replicated by viewers.
 
+EXERCISE INSTRUCTIONS:
 [INSTRUCTIONS]
 
 Enforce:
