@@ -4,42 +4,96 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
+use Laravel\Ai\Files;
 use Laravel\Ai\Image;
 
-#[Signature('app:generate-tutorial {exercise} {notes?}')]
+#[Signature('app:generate-tutorial {exercise} {equipment} {instructions}')]
 #[Description('Generate a tutorial star/end position for an exercise.')]
 class GenerateExerciseTutorial
 {
-
     private function prompt(): string
     {
         $base = '
-        Create a cover image.
-        A hyper-realistic, cinematic studio fitness photography shot of the attached model athlete performing a ['.$this->argument('exercise')."] with the initial and final pose.
-        Setting: The scene is set in a attached space with sleek matte black equipment if necessary.
-        Lighting & Mood: Dramatic 'warm, muted cinematic color grade' lighting with subtle rim lights to define the athlete’s muscles. Moody atmosphere with a slight touch of volumetric fog.
-        Position: 3/4 facing angle.
-        Technical Specs: Shot on 85mm lens, f/1.8, shallow depth of field with a blurred gym background. High contrast, sharp focus on the athlete's form, 8k resolution, raw photo style. No text, no watermarks.
-        Add blurred depth-of-field effect in the background
-        Make sure the environment / character size and positions blend perfectly.";
+Using the attached reference image(s), generate a precise instructional fitness sequence for the exercise [EXERCISE_NAME].
 
-        if ($this->argument('notes')) {
-            $base .= "\n\nAdditional notes: ".$this->argument('notes');
-        }
+REFERENCE PRIORITY:
+- The person from the reference image must be preserved exactly (face, body proportions, hairstyle).
 
-        return $base;
+SEQUENCE:
+Show exactly 3 phases from left to right:
+1) Start position
+2) Mid movement
+3) End position
+
+All three must:
+- use the exact same person
+- be perfectly aligned horizontally
+- have identical scale and framing
+
+CAMERA:
+- angle:  use strict side vire OR 3/4 front/view depending on which one suits better the exercise
+- full body visible
+- consistent angle across all frames
+- no perspective distortion or lens warping
+
+EQUIPMENT:
+[EQUIPMENT]
+
+ENVIRONMENT:
+- clean white studio background
+- soft, even lighting
+- no shadows that hide joints
+
+CLOTHING:
+- fitted athletic outfit in matte black material
+- no gloss, no reflections
+- identical outfit in all frames
+
+FORM ACCURACY (CRITICAL):
+The movement must strictly follow correct biomechanics:
+
+[INSTRUCTIONS]
+
+Enforce:
+- anatomically correct joint angles
+- correct posture (neutral spine unless specified)
+- realistic balance and weight distribution
+- correct interaction with equipment (grip, positioning, range of motion)
+
+EQUIPMENT RULES (if applicable):
+- correct scale relative to body
+- physically plausible contact points
+- no floating or misaligned objects
+
+STRICT CONSTRAINTS:
+- no extra limbs or distortions
+- no motion blur
+- no stylistic interpretation
+- no text or overlays
+- no variation between frames (only pose changes)
+
+STYLE:
+clinical, realistic fitness photography used in professional training manuals
+        ';
+
+        $result = str_replace('[EXERCISE_NAME]', $this->argument('exercise'), $base);
+        $result = str_replace('[EQUIPMENT]', $this->argument('equipment'), $result);
+        $result = str_replace('[INSTRUCTIONS]', $this->argument('instructions'), $result);
+
+        return $result;
     }
 
     public function handle()
     {
         $image = Image::of($this->prompt())
             ->attachments([
-                Files\Image::fromPath(resource_path('assetModels/male.png')),
-                Files\Image::fromPath(resource_path('assetModels/environment.png')),
+                // Files\Image::fromPath(resource_path('assetModels/male.png')),
+                Files\Image::fromPath(resource_path('assetModels/female.png')),
+                // Files\Image::fromPath(resource_path('assetModels/environment.png')),
             ])
-            ->square()
+            ->landscape()
             ->generate();
 
-        $image->storeAs('tutorials/exercise_tutorial_'.$this->argument('exercise').'.jpeg');
+        $image->storeAs('tutorials/'.$this->argument('exercise').'.jpeg');
     }
 }
