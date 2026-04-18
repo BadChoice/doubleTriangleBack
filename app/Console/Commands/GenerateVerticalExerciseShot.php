@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 use Laravel\Ai\Files;
 use Laravel\Ai\Image;
 
-#[Signature('app:generate-vertical-shot {exercise}')]
+#[Signature('app:generate-vertical-shot {exercise} {equipment} {instructions}')]
 #[Description('Generate a icon for an exercise.')]
 class GenerateVerticalExerciseShot extends Command
 {
@@ -21,8 +21,8 @@ Create a vertical (4:5) high-resolution fitness studio photograph of the attache
 ### FRAMING & LAYOUT (STRICT):
 Portrait orientation (4:5 ratio)
 Athlete centered horizontally
-Athlete occupies ~60–70% of image height (do NOT fill the frame)
-Leave clear empty space at the top (~15–20%) and bottom (~15–20%) for text overlays
+Athlete occupies ~50–60% of image height (do NOT fill the frame)
+Leave clear empty space at the top (~20–25%) and bottom (~20–25%) for text overlays
 Full body visible at all times (no cropping of limbs)
 Camera angle: 3/4 view, facing slightly right
 
@@ -31,6 +31,9 @@ Modern home gym, industrial Nordic style
 Concrete + white brick walls
 Matte black fitness equipment
 Minimal, clean, uncluttered background
+
+### EQUIPMENT:
+[EQUIPMENT]
 
 ### LIGHTING:
 Natural daylight from a window (side lighting)
@@ -43,12 +46,9 @@ Exercise: [EXERCISE_NAME]
 Demonstrate perfect beginner-safe form
 Biomechanics must be accurate and realistic
 No exaggerated or unsafe positions
-For machine glute kickback, ensure:
-Neutral spine (no lumbar arch)
-Hips square (no rotation)
-Controlled backward leg extension
-Slight bend in supporting leg
-Foot pushing backward through the heel
+
+These are the instructions of the exercise:
+[INSTRUCTIONS]
 
 
 ### SUBJECT INTEGRATION:
@@ -63,8 +63,11 @@ Sharp subject focus, especially glutes and legs
 Clean commercial look
 No artifacts, no extra limbs, no warped equipment";
 
-        return str_replace("[EXERCISE_NAME]",  $this->argument('exercise'), $base);
+        $result =  str_replace("[EXERCISE_NAME]", $this->argument('exercise'), $base);
+        $result =  str_replace("[EQUIPMENT]",     $this->argument('equipment'), $base);
+        $result =  str_replace("[INSTRUCTIONS]",  $this->argument('instructions'), $base);
 
+        return $result;
     }
 
     /**
@@ -74,8 +77,8 @@ No artifacts, no extra limbs, no warped equipment";
     {
         $image = Image::of($this->prompt())
             ->attachments([
-//                Files\Image::fromPath(resource_path('assetModels/male.png')),
-                Files\Image::fromPath(resource_path('assetModels/female.png')),
+                Files\Image::fromPath(resource_path('assetModels/male.png')),
+//                Files\Image::fromPath(resource_path('assetModels/female.png')),
                 //Files\Image::fromPath(resource_path('assetModels/environment.png')),
             ])
             ->portrait()
