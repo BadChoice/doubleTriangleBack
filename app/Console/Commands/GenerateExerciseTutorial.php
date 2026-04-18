@@ -4,19 +4,18 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
-use Illuminate\Console\Command;
-use Laravel\Ai\Files;
 use Laravel\Ai\Image;
 
-#[Signature('app:generate-icon {exercise} {notes?}')]
-#[Description('Generate a icon for an exercise.')]
-class GenerateIcon extends Command
+#[Signature('app:generate-tutorial {exercise} {notes?}')]
+#[Description('Generate a tutorial star/end position for an exercise.')]
+class GenerateExerciseTutorial
 {
+
     private function prompt(): string
     {
         $base = '
-        Create a 512x512 square icon.
-        A hyper-realistic, cinematic studio fitness photography shot of the attached model athlete performing a ['.$this->argument('exercise')."].
+        Create a cover image.
+        A hyper-realistic, cinematic studio fitness photography shot of the attached model athlete performing a ['.$this->argument('exercise')."] with the initial and final pose.
         Setting: The scene is set in a attached space with sleek matte black equipment if necessary.
         Lighting & Mood: Dramatic 'warm, muted cinematic color grade' lighting with subtle rim lights to define the athlete’s muscles. Moody atmosphere with a slight touch of volumetric fog.
         Position: 3/4 facing angle.
@@ -31,20 +30,16 @@ class GenerateIcon extends Command
         return $base;
     }
 
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
         $image = Image::of($this->prompt())
             ->attachments([
-//                Files\Image::fromPath(resource_path('assetModels/male.png')),
-                Files\Image::fromPath(resource_path('assetModels/female.png')),
+                Files\Image::fromPath(resource_path('assetModels/male.png')),
                 Files\Image::fromPath(resource_path('assetModels/environment.png')),
             ])
             ->square()
             ->generate();
 
-        $image->storeAs('icons/exercise_icon_'.$this->argument('exercise').'.jpeg');
+        $image->storeAs('tutorials/exercise_tutorial_'.$this->argument('exercise').'.jpeg');
     }
 }
