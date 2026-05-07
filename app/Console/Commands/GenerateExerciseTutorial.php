@@ -76,6 +76,8 @@ STRICT CONSTRAINTS:
 - no stylistic interpretation
 - no text or overlays
 - no variation between frames (only pose changes)
+- no muscle overlays
+- no text at all
 
 STYLE:
 clinical, realistic fitness photography used in professional training manuals
