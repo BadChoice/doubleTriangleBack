@@ -77,8 +77,8 @@ No artifacts, no extra limbs, no warped equipment";
     {
         $image = Image::of($this->prompt())
             ->attachments([
-                Files\Image::fromPath(resource_path('assetModels/male.png')),
-//                Files\Image::fromPath(resource_path('assetModels/female.png')),
+                //Files\Image::fromPath(resource_path('assetModels/male.png')),
+                Files\Image::fromPath(resource_path('assetModels/female.png')),
                 //Files\Image::fromPath(resource_path('assetModels/environment.png')),
             ])
             ->portrait()
