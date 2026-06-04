@@ -8,13 +8,13 @@ use Illuminate\Console\Command;
 use Laravel\Ai\Files;
 use Laravel\Ai\Image;
 
-#[Signature('app:generate-vertical-shot {exercise} {equipment} {instructions}')]
+#[Signature('app:generate-vertical-shot {gender} {exercise} {equipment} {instructions}')]
 #[Description('Generate a icon for an exercise.')]
 class GenerateVerticalExerciseShot extends Command
 {
     private function prompt(): string
     {
-        $base = "
+        $base = '
 Create a vertical (4:5) high-resolution fitness studio photograph of the attached athlete model performing:
 [EXERCISE_NAME]
 
@@ -61,11 +61,11 @@ No texts at all
 Professional fitness photography
 Sharp subject focus, especially glutes and legs
 Clean commercial look
-No artifacts, no extra limbs, no warped equipment";
+No artifacts, no extra limbs, no warped equipment';
 
-        $result =  str_replace("[EXERCISE_NAME]", $this->argument('exercise'), $base);
-        $result =  str_replace("[EQUIPMENT]",     $this->argument('equipment'), $base);
-        $result =  str_replace("[INSTRUCTIONS]",  $this->argument('instructions'), $base);
+        $result = str_replace('[EXERCISE_NAME]', $this->argument('exercise'), $base);
+        $result = str_replace('[EQUIPMENT]', $this->argument('equipment'), $base);
+        $result = str_replace('[INSTRUCTIONS]', $this->argument('instructions'), $base);
 
         return $result;
     }
@@ -75,15 +75,16 @@ No artifacts, no extra limbs, no warped equipment";
      */
     public function handle()
     {
+        $gender = $this->argument('gender');
+        $exercise = $this->argument('exercise');
+
         $image = Image::of($this->prompt())
             ->attachments([
-                Files\Image::fromPath(resource_path('assetModels/male.png')),
-//                Files\Image::fromPath(resource_path('assetModels/female.png')),
-                //Files\Image::fromPath(resource_path('assetModels/environment.png')),
+                Files\Image::fromPath(resource_path("assetModels/{$gender}.png")),
             ])
             ->portrait()
             ->generate();
 
-        $image->storeAs('vertical/exercise_vertical_'.$this->argument('exercise').'.jpeg');
+        $image->storeAs('vertical/exercise_vertical_'.$gender.'_'.$exercise.'.jpeg');
     }
 }
