@@ -43,9 +43,10 @@ Background slightly blurred (shallow depth of field)
 
 ### EXERCISE EXECUTION (CRITICAL – MUST BE CORRECT):
 Exercise: [EXERCISE_NAME]
-Demonstrate perfect beginner-safe form
-Biomechanics must be accurate and realistic
-No exaggerated or unsafe positions
+- Demonstrate perfect beginner-safe form
+- Biomechanics must be accurate and realistic
+- No exaggerated or unsafe positions
+- Only one person in the image
 
 These are the instructions of the exercise:
 [INSTRUCTIONS]
