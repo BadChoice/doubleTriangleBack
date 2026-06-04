@@ -85,6 +85,6 @@ No artifacts, no extra limbs, no warped equipment';
             ->portrait()
             ->generate();
 
-        $image->storeAs('vertical/exercise_vertical_'.$gender.'_'.$exercise.'.jpeg');
+        $image->storeAs('vertical/'.$exercise.'_'.$gender.'.jpeg');
     }
 }
